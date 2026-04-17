@@ -1,67 +1,61 @@
 import Link from 'next/link'
 
+const NAV = [
+  { href: '/',         label: 'Inicio'   },
+  { href: '/carta',    label: 'Carta'    },
+  { href: '/reservas', label: 'Reservas' },
+  { href: '/nosotros', label: 'Nosotros' },
+  { href: '/contacto', label: 'Contacto' },
+]
+
 export default function Footer() {
   return (
-    <footer className="bg-[#0A0A0A] border-t border-[#C9A84C]/30 mt-auto">
-      <div className="max-w-6xl mx-auto px-6 py-12">
+    <footer className="bg-reserve-bg border-t border-reserve-outline">
+      <div className="editorial-container py-16 md:py-20">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
-
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 pb-14 border-b border-reserve-outline">
           <div>
-            <h3 className="text-[#C9A84C] font-serif text-xl tracking-widest uppercase mb-3">
-              Matices
-            </h3>
-            <p className="text-[#E8DCC8]/60 text-sm leading-relaxed">
-              Una experiencia gastronómica donde cada plato cuenta una historia.
+            <p className="font-serif text-[1.55rem] text-reserve-gold tracking-[0.22em] mb-5">MATICES</p>
+            <p className="text-reserve-cream/30 text-[13px] leading-relaxed max-w-[220px]">
+              Bar Restaurante de cocina mediterránea en el corazón de Valdemoro, Madrid.
             </p>
           </div>
 
           <div>
-            <h4 className="text-[#E8DCC8] text-xs tracking-widest uppercase mb-4">
-              Navegación
-            </h4>
-            <ul className="flex flex-col gap-2">
-              {[
-                { href: '/carta',    texto: 'Carta'    },
-                { href: '/reservas', texto: 'Reservas' },
-                { href: '/nosotros', texto: 'Nosotros' },
-                { href: '/contacto', texto: 'Contacto' },
-              ].map((enlace) => (
-                <li key={enlace.href}>
-                  <Link
-                    href={enlace.href}
-                    className="text-[#E8DCC8]/60 text-sm hover:text-[#C9A84C] transition-colors duration-300"
-                  >
-                    {enlace.texto}
-                  </Link>
-                </li>
+            <p className="text-[10px] text-reserve-gold uppercase tracking-[0.42em] mb-6">Páginas</p>
+            <nav className="flex flex-col gap-3">
+              {NAV.map(({ href, label }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="text-[12px] uppercase tracking-[0.22em] text-reserve-cream/30 hover:text-reserve-gold transition-colors w-fit"
+                >
+                  {label}
+                </Link>
               ))}
-            </ul>
+            </nav>
           </div>
 
           <div>
-            <h4 className="text-[#E8DCC8] text-xs tracking-widest uppercase mb-4">
-              Encuéntranos
-            </h4>
-            <ul className="flex flex-col gap-2 text-[#E8DCC8]/60 text-sm">
-              <li>Calle Gran Vía, 28 — Madrid</li>
-              <li>+34 91 123 45 67</li>
-              <li>hola@restaurantematices.es</li>
-              <li className="pt-1">
-                Lun–Vie: 13:00 – 23:00<br />
-                Sáb–Dom: 12:00 – 24:00
-              </li>
-            </ul>
+            <p className="text-[10px] text-reserve-gold uppercase tracking-[0.42em] mb-6">Contacto</p>
+            <div className="flex flex-col gap-3 text-[13px] text-reserve-cream/30 leading-relaxed">
+              <span>Av. Mar Mediterráneo, 73<br />28341 Valdemoro, Madrid</span>
+              <span>+34 910 23 15 72</span>
+              <span>+34 622 18 26 46</span>
+              <span>reservas@maticesrestaurante.es</span>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-[#C9A84C]/20 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[#E8DCC8]/40 text-xs tracking-widest">
-            © {new Date().getFullYear()} Matices. Todos los derechos reservados.
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-reserve-cream/20 text-[10px] uppercase tracking-widest">
+            &copy; {new Date().getFullYear()} Matices Bar Restaurante. Todos los derechos reservados.
           </p>
-          <p className="text-[#E8DCC8]/40 text-xs tracking-widest">
-            Diseñado con cuidado y buen gusto
-          </p>
+          <div className="flex items-center gap-3">
+            <div className="h-px w-5 bg-reserve-gold/20" />
+            <span className="text-reserve-gold/20 text-[10px] uppercase tracking-widest">Valdemoro, Madrid</span>
+            <div className="h-px w-5 bg-reserve-gold/20" />
+          </div>
         </div>
 
       </div>

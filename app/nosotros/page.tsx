@@ -1,119 +1,211 @@
-// app/nosotros/page.tsx
+'use client'
 
+import { motion } from 'motion/react'
 import Link from 'next/link'
+import { ArrowRight } from 'lucide-react'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+}
+
+const stagger = {
+  hidden: {},
+  show:   { transition: { staggerChildren: 0.12 } },
+}
+
+const VALORES = [
+  {
+    num: '01', titulo: 'Producto fresco',
+    texto: 'Seleccionamos a diario el mejor producto del mercado: gambas rojas mediterráneas, pulpo gallego, carnes maduradas y verduras de temporada.',
+  },
+  {
+    num: '02', titulo: 'Parrilla a la vista',
+    texto: 'Nuestra parrilla es el corazón del restaurante. Cada chuletón, secreto ibérico o chuletilla de cordero se cocina a fuego vivo ante tus ojos.',
+  },
+  {
+    num: '03', titulo: 'Recetas caseras',
+    texto: 'Los postres y elaboraciones propias —tarta de queso, croquetas, cocido madrileño— son la seña de identidad de Matices desde el primer día.',
+  },
+  {
+    num: '04', titulo: 'Hospitalidad real',
+    texto: 'Cada cliente es un invitado. Disponemos de terraza exterior, acceso para movilidad reducida y aceptamos mascotas. El espacio es tuyo.',
+  },
+]
+
+const SERVICIOS = [
+  'Terraza exterior',
+  'Aire acondicionado',
+  'Eventos privados',
+  'Banquetes y bodas',
+  'Accesible para movilidad reducida',
+  'Mascotas bienvenidas',
+  'Pago con tarjeta',
+  'Parking cercano',
+]
 
 export default function NosotrosPage() {
   return (
-    <div className="bg-[#0A0A0A] min-h-screen">
+    <div className="min-h-screen">
 
-      {/* Cabecera */}
-      <section className="py-24 px-6 text-center border-b border-[#C9A84C]/20">
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <div className="h-px w-16 bg-[#C9A84C]" />
-          <span className="text-[#C9A84C] text-xs tracking-[0.4em] uppercase">
-            Nuestra historia
-          </span>
-          <div className="h-px w-16 bg-[#C9A84C]" />
+      {/* Header */}
+      <section className="pt-40 pb-20 px-6 text-center border-b border-reserve-outline">
+        <div className="flex items-center justify-center gap-5 mb-8">
+          <div className="h-px w-14 bg-reserve-gold/40" />
+          <span className="text-reserve-gold text-[10px] uppercase tracking-[0.5em]">Quiénes somos</span>
+          <div className="h-px w-14 bg-reserve-gold/40" />
         </div>
-        <h1 className="font-serif text-5xl md:text-7xl text-white tracking-widest uppercase mb-4">
+        <h1 className="font-serif text-[clamp(3rem,8vw,7rem)] leading-none tracking-wide text-white mb-6">
           Nosotros
         </h1>
-        <p className="text-[#E8DCC8]/60 text-sm tracking-wide max-w-md mx-auto">
-          Conoce la historia, los valores y las personas detrás de Matices
+        <p className="text-reserve-cream/40 text-sm tracking-wide max-w-sm mx-auto leading-relaxed">
+          Bar Restaurante de cocina mediterránea en Valdemoro, Madrid
         </p>
       </section>
 
-      {/* Historia */}
-      <section className="max-w-4xl mx-auto px-6 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center mb-24">
-          <div>
-            <span className="text-[#C9A84C] text-xs tracking-[0.4em] uppercase">
-              Desde 2018
-            </span>
-            <h2 className="font-serif text-4xl text-white mt-3 mb-6">
-              Una pasión hecha restaurante
-            </h2>
-            <p className="text-[#E8DCC8]/60 text-sm leading-relaxed mb-4">
-              Matices nació de la convicción de que la gastronomía es mucho más que alimentarse. Es cultura, es memoria, es emoción. Fundado en 2018 en el corazón de Madrid, nuestro restaurante es el resultado de años de viajes, aprendizajes y una profunda admiración por el producto español.
-            </p>
-            <p className="text-[#E8DCC8]/60 text-sm leading-relaxed">
-              Cada plato que sale de nuestra cocina es el resultado de un proceso cuidadoso: selección del mejor género, respeto por las temporadas y una técnica depurada que realza, sin ocultar, la esencia de cada ingrediente.
-            </p>
-          </div>
+      <section className="max-w-5xl mx-auto px-6 py-28">
 
-          {/* Cita destacada */}
-          <div className="border-l-2 border-[#C9A84C] pl-8">
-            <p className="font-serif text-2xl text-white leading-relaxed mb-6">
-              "Cocinar es un acto de amor. Cada plato es una conversación entre el chef y el comensal."
-            </p>
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-px bg-[#C9A84C]" />
-              <span className="text-[#C9A84C] text-xs tracking-widest uppercase">
-                Chef Ejecutivo, Matices
+        {/* Historia */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">
+
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-80px' }}
+          >
+            <motion.span variants={fadeUp}
+              className="block text-reserve-gold text-[10px] uppercase tracking-[0.45em] mb-6"
+            >
+              Valdemoro, Madrid
+            </motion.span>
+            <motion.h2 variants={fadeUp}
+              className="font-serif text-[clamp(2rem,4vw,3.2rem)] text-white leading-tight mb-8"
+            >
+              Cocina mediterránea con alma propia
+            </motion.h2>
+            <motion.div variants={fadeUp} className="space-y-5 text-reserve-cream/50 text-[15px] leading-[1.85]">
+              <p>
+                Matices nació con una idea clara: ofrecer cocina mediterránea de verdad en Valdemoro.
+                Producto fresco, parrilla honesta y recetas de siempre ejecutadas con cariño y precisión.
+              </p>
+              <p>
+                Desde nuestros entrantes —gambas rojas, pulpo a la brasa, alcachofas asadas—
+                hasta los postres caseros como la tarta de queso o la pannacota, todo lo que
+                sale de nuestra cocina está hecho con el mismo criterio: que sea rico de verdad.
+              </p>
+              <p>
+                Nuestra parrilla es el alma del restaurante. Chuletones de vaca vieja, secreto
+                ibérico, chuletillas de cordero… cada pieza se cocina a fuego vivo para que
+                llegue a tu mesa en su punto exacto.
+              </p>
+            </motion.div>
+          </motion.div>
+
+          {/* Quote */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            className="border-l-2 border-reserve-gold/25 pl-10"
+          >
+            <blockquote className="font-serif text-2xl md:text-[1.7rem] text-white leading-[1.4] mb-8 italic">
+              "Buena materia prima, fuego y tiempo. Con eso es suficiente para que algo sea memorable."
+            </blockquote>
+            <div className="flex items-center gap-4">
+              <div className="h-px w-8 bg-reserve-gold/45" />
+              <span className="text-reserve-gold/55 text-[10px] uppercase tracking-[0.38em]">
+                Matices Bar Restaurante · Valdemoro
               </span>
             </div>
-          </div>
+          </motion.div>
+
         </div>
 
         {/* Valores */}
-        <div className="border-t border-[#C9A84C]/20 pt-20">
-          <div className="text-center mb-16">
-            <span className="text-[#C9A84C] text-xs tracking-[0.4em] uppercase">
+        <div className="border-t border-reserve-outline pt-24">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: '-60px' }}
+            className="mb-16"
+          >
+            <motion.span variants={fadeUp}
+              className="block text-reserve-gold text-[10px] uppercase tracking-[0.45em] mb-4"
+            >
               Lo que nos define
-            </span>
-            <h2 className="font-serif text-4xl text-white mt-3">
-              Nuestros valores
-            </h2>
-          </div>
+            </motion.span>
+            <motion.h2 variants={fadeUp}
+              className="font-serif text-[clamp(2rem,4vw,3.2rem)] text-white"
+            >
+              Nuestra forma de cocinar
+            </motion.h2>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {[
-              {
-                titulo: 'Producto local',
-                texto: 'Colaboramos con productores y agricultores de proximidad. Conocemos el origen de cada ingrediente que entra en nuestra cocina.',
-              },
-              {
-                titulo: 'Temporalidad',
-                texto: 'Nuestra carta cambia con las estaciones. Trabajamos con lo que la naturaleza nos ofrece en cada momento del año.',
-              },
-              {
-                titulo: 'Sostenibilidad',
-                texto: 'Minimizamos el desperdicio alimentario y apostamos por prácticas respetuosas con el medio ambiente en toda nuestra cadena.',
-              },
-              {
-                titulo: 'Hospitalidad',
-                texto: 'Cada cliente que entra por nuestra puerta es un invitado. Nos importa que te sientas cómodo, atendido y especial.',
-              },
-            ].map((valor) => (
-              <div key={valor.titulo} className="flex gap-6">
-                <div className="w-1 flex-shrink-0 bg-gradient-to-b from-[#C9A84C] to-transparent rounded-full" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 mb-24">
+            {VALORES.map((v, i) => (
+              <motion.div
+                key={v.titulo}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.8, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                className="flex gap-7"
+              >
+                <span className="text-reserve-gold/20 font-serif text-4xl leading-none mt-1 select-none flex-shrink-0">
+                  {v.num}
+                </span>
                 <div>
-                  <h3 className="text-white text-lg tracking-wide mb-2">
-                    {valor.titulo}
-                  </h3>
-                  <p className="text-[#E8DCC8]/60 text-sm leading-relaxed">
-                    {valor.texto}
-                  </p>
+                  <h3 className="text-white text-lg font-serif mb-3">{v.titulo}</h3>
+                  <p className="text-reserve-cream/45 text-sm leading-relaxed">{v.texto}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
+
+          {/* Servicios */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-40px' }}
+            transition={{ duration: 0.8 }}
+            className="border-t border-reserve-outline pt-16"
+          >
+            <span className="block text-reserve-gold text-[10px] uppercase tracking-[0.45em] mb-8">
+              Instalaciones y servicios
+            </span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {SERVICIOS.map(s => (
+                <div key={s} className="flex items-center gap-3 border border-reserve-outline px-4 py-3">
+                  <div className="w-1 h-1 bg-reserve-gold rounded-full flex-shrink-0" />
+                  <span className="text-reserve-cream/50 text-[12px] leading-tight">{s}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-24 pt-16 border-t border-[#C9A84C]/20">
-          <p className="text-[#E8DCC8]/60 text-sm mb-8 tracking-wide">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mt-28 pt-20 border-t border-reserve-outline"
+        >
+          <p className="text-reserve-cream/40 text-sm mb-10 tracking-wide">
             ¿Quieres vivir la experiencia Matices?
           </p>
           <Link
             href="/reservas"
-            className="inline-block bg-[#C9A84C] text-[#0A0A0A] px-12 py-4
-                       text-xs tracking-[0.3em] uppercase font-semibold
-                       hover:bg-[#E8DCC8] transition-all duration-300"
+            className="gold-gradient text-reserve-bg px-14 py-5 text-[10px] font-bold uppercase tracking-[0.42em] hover:opacity-80 transition-opacity inline-flex items-center gap-3"
           >
-            Reservar mesa
+            Reservar mesa <ArrowRight size={13} />
           </Link>
-        </div>
+        </motion.div>
+
       </section>
     </div>
   )

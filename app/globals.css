@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --font-serif: var(--font-noto-serif), serif;
+  --font-sans:  var(--font-manrope), sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-reserve-bg:      #0A0A0A;
+  --color-reserve-gold:    #C9A84C;
+  --color-reserve-gold-dk: #a8873d;
+  --color-reserve-cream:   #E8DCC8;
+  --color-reserve-outline: rgba(201, 168, 76, 0.15);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-reserve-bg text-reserve-cream font-sans antialiased;
 }
+
+h1, h2, h3, h4 {
+  @apply font-serif;
+}
+
+.gold-gradient {
+  background: linear-gradient(135deg, #C9A84C 0%, #a8873d 100%);
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, #C9A84C 0%, #E8DCC8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.editorial-container {
+  @apply max-w-7xl mx-auto px-6 md:px-12 lg:px-20;
+}
+
+.scrollbar-hide { scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+::-webkit-scrollbar       { width: 5px; }
+::-webkit-scrollbar-track { @apply bg-reserve-bg; }
+::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.25); border-radius: 9999px; }

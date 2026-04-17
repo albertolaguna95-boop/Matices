@@ -1,108 +1,119 @@
+'use client'
 
-'use client' 
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { motion, AnimatePresence } from 'motion/react'
+import { Menu, X } from 'lucide-react'
+
+const LINKS = [
+  { href: '/carta',    label: 'Carta'    },
+  { href: '/nosotros', label: 'Nosotros' },
+  { href: '/contacto', label: 'Contacto' },
+]
 
 export default function Navbar() {
-  // Estado para abrir/cerrar el menú en móvil
-  const [menuAbierto, setMenuAbierto] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [open, setOpen]         = useState(false)
+  const pathname                = usePathname()
 
-  // Enlaces de navegación
-  const enlaces = [
-    { href: '/',         texto: 'Inicio'    },
-    { href: '/carta',    texto: 'Carta'     },
-    { href: '/reservas', texto: 'Reservas'  },
-    { href: '/nosotros', texto: 'Nosotros'  },
-    { href: '/contacto', texto: 'Contacto'  },
-  ]
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => { setOpen(false) }, [pathname])
 
   return (
-    <nav className="bg-[#0A0A0A] border-b border-[#C9A84C]/30 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <>
+      <motion.header
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
+          scrolled
+            ? 'bg-reserve-bg/95 backdrop-blur-xl border-b border-reserve-outline py-4 shadow-[0_1px_40px_rgba(0,0,0,0.7)]'
+            : 'bg-transparent py-7'
+        }`}
+      >
+        <div className="editorial-container flex items-center justify-between">
+          <Link
+            href="/"
+            className="font-serif text-[1.3rem] text-reserve-gold tracking-[0.22em] hover:opacity-70 transition-opacity"
+          >
+            MATICES
+          </Link>
 
-        {/* Logo / Nombre del restaurante */}
-        <Link href="/" className="flex flex-col leading-tight">
-          <span className="text-[#C9A84C] font-serif text-2xl tracking-widest uppercase">
-            Matices
-          </span>
-          <span className="text-[#E8DCC8]/60 text-xs tracking-[0.3em] uppercase">
-            Restaurante
-          </span>
-        </Link>
-
-        {/* Enlaces de escritorio - se ocultan en móvil */}
-        <ul className="hidden md:flex items-center gap-8">
-          {enlaces.map((enlace) => (
-            <li key={enlace.href}>
+          <nav className="hidden md:flex items-center gap-10">
+            {LINKS.map(({ href, label }) => (
               <Link
-                href={enlace.href}
-                className="text-[#E8DCC8] text-sm tracking-widest uppercase
-                           hover:text-[#C9A84C] transition-colors duration-300"
+                key={href}
+                href={href}
+                className={`text-[11px] uppercase tracking-[0.28em] transition-colors duration-300 ${
+                  pathname === href
+                    ? 'text-reserve-gold'
+                    : 'text-reserve-cream/50 hover:text-reserve-cream'
+                }`}
               >
-                {enlace.texto}
+                {label}
               </Link>
-            </li>
-          ))}
-        </ul>
-
-        {/* Botón de reserva - escritorio */}
-        <Link
-          href="/reservas"
-          className="hidden md:block border border-[#C9A84C] text-[#C9A84C]
-                     px-6 py-2 text-xs tracking-widest uppercase
-                     hover:bg-[#C9A84C] hover:text-[#0A0A0A]
-                     transition-all duration-300"
-        >
-          Reservar mesa
-        </Link>
-
-        {/* Botón hamburguesa - solo móvil */}
-        <button
-          onClick={() => setMenuAbierto(!menuAbierto)}
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          aria-label="Abrir menú"
-        >
-          <span className={`block w-6 h-px bg-[#C9A84C] transition-all duration-300
-                           ${menuAbierto ? 'rotate-45 translate-y-2' : ''}`} />
-          <span className={`block w-6 h-px bg-[#C9A84C] transition-all duration-300
-                           ${menuAbierto ? 'opacity-0' : ''}`} />
-          <span className={`block w-6 h-px bg-[#C9A84C] transition-all duration-300
-                           ${menuAbierto ? '-rotate-45 -translate-y-2' : ''}`} />
-        </button>
-      </div>
-
-      {/* Menú móvil desplegable */}
-      {menuAbierto && (
-        <div className="md:hidden bg-[#0A0A0A] border-t border-[#C9A84C]/20 px-6 py-4">
-          <ul className="flex flex-col gap-4">
-            {enlaces.map((enlace) => (
-              <li key={enlace.href}>
-                <Link
-                  href={enlace.href}
-                  onClick={() => setMenuAbierto(false)}
-                  className="text-[#E8DCC8] text-sm tracking-widest uppercase
-                             hover:text-[#C9A84C] transition-colors duration-300"
-                >
-                  {enlace.texto}
-                </Link>
-              </li>
             ))}
-            <li>
-              <Link
-                href="/reservas"
-                onClick={() => setMenuAbierto(false)}
-                className="inline-block border border-[#C9A84C] text-[#C9A84C]
-                           px-6 py-2 text-xs tracking-widest uppercase
-                           hover:bg-[#C9A84C] hover:text-[#0A0A0A]
-                           transition-all duration-300 mt-2"
-              >
-                Reservar mesa
-              </Link>
-            </li>
-          </ul>
+          </nav>
+
+          <Link
+            href="/reservas"
+            className="hidden md:inline-block gold-gradient text-reserve-bg text-[10px] font-bold uppercase tracking-[0.28em] px-8 py-3 hover:opacity-80 transition-opacity"
+          >
+            Reservar
+          </Link>
+
+          <button
+            onClick={() => setOpen(v => !v)}
+            className="md:hidden text-reserve-gold p-1"
+            aria-label={open ? 'Cerrar menú' : 'Abrir menú'}
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
-      )}
-    </nav>
+      </motion.header>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-reserve-bg flex flex-col items-center justify-center gap-9 px-8"
+          >
+            <Link href="/" className="font-serif text-3xl text-reserve-gold tracking-[0.22em] mb-4">
+              MATICES
+            </Link>
+
+            {[...LINKS, { href: '/reservas', label: 'Reservas' }].map(({ href, label }, i) => (
+              <motion.div
+                key={href}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ delay: i * 0.07, duration: 0.4 }}
+              >
+                <Link
+                  href={href}
+                  className={`font-serif text-[2rem] transition-colors ${
+                    pathname === href
+                      ? 'text-reserve-gold'
+                      : 'text-reserve-cream/65 hover:text-reserve-gold'
+                  }`}
+                >
+                  {label}
+                </Link>
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }

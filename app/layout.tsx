@@ -1,36 +1,34 @@
-// app/layout.tsx
-// Plantilla madre — envuelve todas las páginas con Navbar y Footer
-
 import type { Metadata } from 'next'
+import { Manrope, Noto_Serif } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 
+const manrope = Manrope({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-manrope',
+})
+
+const notoSerif = Noto_Serif({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  variable: '--font-noto-serif',
+})
+
 export const metadata: Metadata = {
-  title: 'Matices — Restaurante',
-  description: 'Una experiencia gastronómica única en Madrid',
+  title: 'Matices — Bar Restaurante · Valdemoro',
+  description: 'Restaurante de cocina mediterránea en Valdemoro, Madrid. Parrilla, entrantes, ensaladas y postres caseros. Reservas: +34 910 23 15 72.',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <body className="bg-[#0A0A0A] text-white min-h-screen flex flex-col">
-
-        {/* Barra de navegación - siempre arriba */}
+    <html lang="es" className={`${manrope.variable} ${notoSerif.variable}`}>
+      <body className="bg-reserve-bg text-reserve-cream min-h-screen flex flex-col">
         <Navbar />
-
-        {/* Contenido de cada página */}
-        <main className="flex-1">
-          {children}
-        </main>
-
-        {/* Pie de página - siempre abajo */}
+        <main className="flex-1">{children}</main>
         <Footer />
-
       </body>
     </html>
   )

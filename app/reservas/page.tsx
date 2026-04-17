@@ -1,297 +1,235 @@
-// app/reservas/page.tsx
-// Formulario de reservas — guarda los datos en Supabase
-
-'use client' // Necesario porque usamos useState y eventos de formulario
+'use client'
 
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import { supabase } from '@/lib/supabase'
+import { CheckCircle, ArrowRight } from 'lucide-react'
 
-// Definimos la estructura del formulario
 type FormData = {
-  nombre: string
-  email: string
+  nombre:   string
+  email:    string
   telefono: string
-  fecha: string
-  hora: string
+  fecha:    string
+  hora:     string
   personas: string
-  mensaje: string
+  mensaje:  string
+}
+
+const HORAS = [
+  '13:00','13:30','14:00','14:30','15:00','15:30',
+  '20:00','20:30','21:00','21:30','22:00','22:30',
+]
+
+const INPUT_CLS =
+  'bg-transparent border-b border-reserve-gold/25 text-white py-3.5 text-sm tracking-wide outline-none ' +
+  'placeholder:text-reserve-cream/20 focus:border-reserve-gold transition-colors duration-300 w-full'
+
+const SELECT_CLS =
+  'bg-reserve-bg border-b border-reserve-gold/25 text-white py-3.5 text-sm tracking-wide outline-none ' +
+  'focus:border-reserve-gold transition-colors duration-300 w-full appearance-none cursor-pointer'
+
+const LABEL_CLS = 'text-[10px] uppercase tracking-[0.38em] text-reserve-cream/40 mb-2 block'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+}
+
+const stagger = {
+  hidden: {},
+  show:   { transition: { staggerChildren: 0.1 } },
+}
+
+const EMPTY: FormData = {
+  nombre: '', email: '', telefono: '', fecha: '', hora: '', personas: '2', mensaje: '',
 }
 
 export default function ReservasPage() {
-  // Estado del formulario
-  const [formData, setFormData] = useState<FormData>({
-    nombre: '',
-    email: '',
-    telefono: '',
-    fecha: '',
-    hora: '',
-    personas: '2',
-    mensaje: '',
-  })
-
-  // Estado para saber si está enviando, si tuvo éxito o si hubo error
+  const [form, setForm]       = useState<FormData>(EMPTY)
   const [enviando, setEnviando] = useState(false)
-  const [exito, setExito] = useState(false)
-  const [error, setError] = useState('')
+  const [exito, setExito]     = useState(false)
+  const [error, setError]     = useState('')
 
-  // Función que actualiza el formulario cuando el usuario escribe
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+  ) => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
 
-  // Función que se ejecuta cuando el usuario envía el formulario
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault() // Evita que la página se recargue
+    e.preventDefault()
     setEnviando(true)
     setError('')
 
-    // Guardamos la reserva en Supabase
-    const { error: supabaseError } = await supabase
-      .from('reservas')
-      .insert([
-        {
-          nombre:   formData.nombre,
-          email:    formData.email,
-          telefono: formData.telefono,
-          fecha:    formData.fecha,
-          hora:     formData.hora,
-          personas: parseInt(formData.personas),
-          mensaje:  formData.mensaje,
-        }
-      ])
+    const { error: err } = await supabase.from('reservas').insert([{
+      nombre:   form.nombre,
+      email:    form.email,
+      telefono: form.telefono,
+      fecha:    form.fecha,
+      hora:     form.hora,
+      personas: parseInt(form.personas),
+      mensaje:  form.mensaje,
+    }])
 
     setEnviando(false)
-
-    if (supabaseError) {
-      setError('Ha ocurrido un error al guardar la reserva. Inténtalo de nuevo.')
-      return
-    }
-
-    // Si todo fue bien, mostramos el mensaje de éxito
+    if (err) { setError('Ha ocurrido un error. Por favor, inténtalo de nuevo.'); return }
     setExito(true)
   }
 
-  // ═══ PANTALLA DE ÉXITO ═══
+  /* ── Éxito ── */
   if (exito) {
     return (
-      <div className="bg-[#0A0A0A] min-h-screen flex items-center justify-center px-6">
-        <div className="text-center max-w-md">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="h-px w-12 bg-[#C9A84C]" />
-            <div className="w-2 h-2 bg-[#C9A84C] rotate-45" />
-            <div className="h-px w-12 bg-[#C9A84C]" />
+      <div className="min-h-screen flex items-center justify-center px-6">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center max-w-md"
+        >
+          <div className="flex justify-center mb-8">
+            <div className="w-16 h-16 border border-reserve-gold/30 rounded-full flex items-center justify-center">
+              <CheckCircle className="text-reserve-gold" size={28} strokeWidth={1.5} />
+            </div>
           </div>
-          <h2 className="font-serif text-4xl text-white mb-4">
-            Reserva confirmada
-          </h2>
-          <p className="text-[#E8DCC8]/60 text-sm leading-relaxed mb-8">
-            Gracias, <span className="text-[#E8DCC8]">{formData.nombre}</span>.
-            Hemos recibido tu reserva para el{' '}
-            <span className="text-[#E8DCC8]">{formData.fecha}</span> a las{' '}
-            <span className="text-[#E8DCC8]">{formData.hora}</span>.
+
+          <div className="flex items-center justify-center gap-5 mb-6">
+            <div className="h-px w-10 bg-reserve-gold/40" />
+            <span className="text-reserve-gold text-[10px] uppercase tracking-[0.45em]">Confirmado</span>
+            <div className="h-px w-10 bg-reserve-gold/40" />
+          </div>
+
+          <h2 className="font-serif text-4xl text-white mb-5">Reserva recibida</h2>
+
+          <p className="text-reserve-cream/50 text-sm leading-relaxed mb-10">
+            Gracias, <span className="text-reserve-cream">{form.nombre}</span>. Hemos recibido tu
+            reserva para el <span className="text-reserve-cream">{form.fecha}</span> a las{' '}
+            <span className="text-reserve-cream">{form.hora}</span>.
             <br /><br />
-            Nos pondremos en contacto contigo para confirmarla.
+            Nos pondremos en contacto para confirmarla.
           </p>
+
           <button
-            onClick={() => { setExito(false); setFormData({
-              nombre: '', email: '', telefono: '',
-              fecha: '', hora: '', personas: '2', mensaje: ''
-            })}}
-            className="border border-[#C9A84C]/60 text-[#C9A84C] px-8 py-3
-                       text-xs tracking-widest uppercase
-                       hover:bg-[#C9A84C] hover:text-[#0A0A0A]
-                       transition-all duration-300"
+            onClick={() => { setExito(false); setForm(EMPTY) }}
+            className="border border-reserve-gold/40 text-reserve-gold text-[10px] uppercase tracking-[0.38em] px-10 py-4 hover:bg-reserve-gold hover:text-reserve-bg transition-all duration-300"
           >
             Hacer otra reserva
           </button>
-        </div>
+        </motion.div>
       </div>
     )
   }
 
-  // ═══ FORMULARIO ═══
+  /* ── Formulario ── */
   return (
-    <div className="bg-[#0A0A0A] min-h-screen">
+    <div className="min-h-screen">
 
-      {/* Cabecera */}
-      <section className="py-24 px-6 text-center border-b border-[#C9A84C]/20">
-        <div className="flex items-center justify-center gap-4 mb-6">
-          <div className="h-px w-16 bg-[#C9A84C]" />
-          <span className="text-[#C9A84C] text-xs tracking-[0.4em] uppercase">
+      {/* Header */}
+      <section className="pt-40 pb-20 px-6 text-center border-b border-reserve-outline">
+        <div className="flex items-center justify-center gap-5 mb-8">
+          <div className="h-px w-14 bg-reserve-gold/40" />
+          <span className="text-reserve-gold text-[10px] uppercase tracking-[0.5em]">
             Reserva tu mesa
           </span>
-          <div className="h-px w-16 bg-[#C9A84C]" />
+          <div className="h-px w-14 bg-reserve-gold/40" />
         </div>
-        <h1 className="font-serif text-5xl md:text-7xl text-white tracking-widest uppercase mb-4">
+        <h1 className="font-serif text-[clamp(3rem,8vw,7rem)] leading-none tracking-wide text-white mb-6">
           Reservas
         </h1>
-        <p className="text-[#E8DCC8]/60 text-sm tracking-wide max-w-md mx-auto">
-          Completa el formulario y nos pondremos en contacto contigo para confirmar tu reserva
+        <p className="text-reserve-cream/40 text-sm tracking-wide max-w-sm mx-auto leading-relaxed">
+          Completa el formulario y confirmaremos tu reserva a la brevedad
         </p>
       </section>
 
-      {/* Formulario */}
-      <section className="max-w-2xl mx-auto px-6 py-20">
-        <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+      {/* Form */}
+      <section className="max-w-2xl mx-auto px-6 py-24">
+        <motion.form
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+          onSubmit={handleSubmit}
+          className="flex flex-col gap-10"
+        >
+          {/* Nombre */}
+          <motion.div variants={fadeUp} className="flex flex-col">
+            <label className={LABEL_CLS}>Nombre completo *</label>
+            <input type="text" name="nombre" value={form.nombre} onChange={handleChange}
+              required placeholder="Tu nombre completo" className={INPUT_CLS} />
+          </motion.div>
 
-          {/* Fila — Nombre */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[#E8DCC8]/60 text-xs tracking-widest uppercase">
-              Nombre completo *
-            </label>
-            <input
-              type="text"
-              name="nombre"
-              value={formData.nombre}
-              onChange={handleChange}
-              required
-              placeholder="Tu nombre"
-              className="bg-transparent border-b border-[#C9A84C]/30 text-white
-                         py-3 text-sm tracking-wide outline-none
-                         placeholder:text-[#E8DCC8]/20
-                         focus:border-[#C9A84C] transition-colors duration-300"
-            />
-          </div>
+          {/* Email + Teléfono */}
+          <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="flex flex-col">
+              <label className={LABEL_CLS}>Email *</label>
+              <input type="email" name="email" value={form.email} onChange={handleChange}
+                required placeholder="tu@email.com" className={INPUT_CLS} />
+            </div>
+            <div className="flex flex-col">
+              <label className={LABEL_CLS}>Teléfono *</label>
+              <input type="tel" name="telefono" value={form.telefono} onChange={handleChange}
+                required placeholder="+34 600 000 000" className={INPUT_CLS} />
+            </div>
+          </motion.div>
 
-          {/* Fila — Email y Teléfono */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="flex flex-col gap-2">
-              <label className="text-[#E8DCC8]/60 text-xs tracking-widest uppercase">
-                Email *
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                placeholder="tu@email.com"
-                className="bg-transparent border-b border-[#C9A84C]/30 text-white
-                           py-3 text-sm tracking-wide outline-none
-                           placeholder:text-[#E8DCC8]/20
-                           focus:border-[#C9A84C] transition-colors duration-300"
-              />
+          {/* Fecha + Hora + Personas */}
+          <motion.div variants={fadeUp} className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div className="flex flex-col">
+              <label className={LABEL_CLS}>Fecha *</label>
+              <input type="date" name="fecha" value={form.fecha} onChange={handleChange}
+                required className={`${INPUT_CLS} [color-scheme:dark]`} />
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-[#E8DCC8]/60 text-xs tracking-widest uppercase">
-                Teléfono *
-              </label>
-              <input
-                type="tel"
-                name="telefono"
-                value={formData.telefono}
-                onChange={handleChange}
-                required
-                placeholder="+34 600 000 000"
-                className="bg-transparent border-b border-[#C9A84C]/30 text-white
-                           py-3 text-sm tracking-wide outline-none
-                           placeholder:text-[#E8DCC8]/20
-                           focus:border-[#C9A84C] transition-colors duration-300"
-              />
-            </div>
-          </div>
-
-          {/* Fila — Fecha, Hora y Personas */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="flex flex-col gap-2">
-              <label className="text-[#E8DCC8]/60 text-xs tracking-widest uppercase">
-                Fecha *
-              </label>
-              <input
-                type="date"
-                name="fecha"
-                value={formData.fecha}
-                onChange={handleChange}
-                required
-                className="bg-transparent border-b border-[#C9A84C]/30 text-white
-                           py-3 text-sm tracking-wide outline-none
-                           focus:border-[#C9A84C] transition-colors duration-300
-                           [color-scheme:dark]"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-[#E8DCC8]/60 text-xs tracking-widest uppercase">
-                Hora *
-              </label>
-              <select
-                name="hora"
-                value={formData.hora}
-                onChange={handleChange}
-                required
-                className="bg-[#0A0A0A] border-b border-[#C9A84C]/30 text-white
-                           py-3 text-sm tracking-wide outline-none
-                           focus:border-[#C9A84C] transition-colors duration-300"
-              >
+            <div className="flex flex-col">
+              <label className={LABEL_CLS}>Hora *</label>
+              <select name="hora" value={form.hora} onChange={handleChange} required className={SELECT_CLS}>
                 <option value="">Selecciona</option>
-                {['13:00','13:30','14:00','14:30','15:00','15:30',
-                  '20:00','20:30','21:00','21:30','22:00','22:30'].map(h => (
-                  <option key={h} value={h}>{h}</option>
-                ))}
+                {HORAS.map(h => <option key={h} value={h}>{h}</option>)}
               </select>
             </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-[#E8DCC8]/60 text-xs tracking-widest uppercase">
-                Personas *
-              </label>
-              <select
-                name="personas"
-                value={formData.personas}
-                onChange={handleChange}
-                required
-                className="bg-[#0A0A0A] border-b border-[#C9A84C]/30 text-white
-                           py-3 text-sm tracking-wide outline-none
-                           focus:border-[#C9A84C] transition-colors duration-300"
-              >
+            <div className="flex flex-col">
+              <label className={LABEL_CLS}>Personas *</label>
+              <select name="personas" value={form.personas} onChange={handleChange} required className={SELECT_CLS}>
                 {[1,2,3,4,5,6,7,8].map(n => (
                   <option key={n} value={n}>{n} {n === 1 ? 'persona' : 'personas'}</option>
                 ))}
               </select>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Fila — Mensaje opcional */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[#E8DCC8]/60 text-xs tracking-widest uppercase">
-              Peticiones especiales
-            </label>
-            <textarea
-              name="mensaje"
-              value={formData.mensaje}
-              onChange={handleChange}
-              placeholder="Alergias, ocasión especial, preferencias..."
-              rows={3}
-              className="bg-transparent border-b border-[#C9A84C]/30 text-white
-                         py-3 text-sm tracking-wide outline-none resize-none
-                         placeholder:text-[#E8DCC8]/20
-                         focus:border-[#C9A84C] transition-colors duration-300"
-            />
-          </div>
+          {/* Mensaje */}
+          <motion.div variants={fadeUp} className="flex flex-col">
+            <label className={LABEL_CLS}>Peticiones especiales</label>
+            <textarea name="mensaje" value={form.mensaje} onChange={handleChange}
+              placeholder="Alergias, ocasión especial, preferencias de mesa..." rows={3}
+              className={`${INPUT_CLS} resize-none`} />
+          </motion.div>
 
-          {/* Mensaje de error */}
-          {error && (
-            <p className="text-red-400 text-sm tracking-wide">{error}</p>
-          )}
+          {/* Error */}
+          <AnimatePresence>
+            {error && (
+              <motion.p
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="text-red-400 text-sm tracking-wide -mt-4"
+              >
+                {error}
+              </motion.p>
+            )}
+          </AnimatePresence>
 
-          {/* Botón de envío */}
-          <button
-            type="submit"
-            disabled={enviando}
-            className="bg-[#C9A84C] text-[#0A0A0A] py-4 text-xs
-                       tracking-[0.3em] uppercase font-semibold
-                       hover:bg-[#E8DCC8] transition-all duration-300
-                       disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-          >
-            {enviando ? 'Enviando...' : 'Confirmar reserva'}
-          </button>
-
-          <p className="text-[#E8DCC8]/30 text-xs tracking-wide text-center">
-            * Campos obligatorios. Te confirmaremos la reserva por email o teléfono.
-          </p>
-
-        </form>
+          {/* Submit */}
+          <motion.div variants={fadeUp}>
+            <button
+              type="submit"
+              disabled={enviando}
+              className="w-full gold-gradient text-reserve-bg py-5 text-[10px] font-bold uppercase tracking-[0.38em] hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            >
+              {enviando ? 'Enviando...' : (<>Confirmar reserva <ArrowRight size={13} /></>)}
+            </button>
+            <p className="text-reserve-cream/25 text-[11px] tracking-wide text-center mt-5">
+              * Campos obligatorios. Te confirmaremos la reserva por email o teléfono.
+            </p>
+          </motion.div>
+        </motion.form>
       </section>
+
     </div>
   )
 }

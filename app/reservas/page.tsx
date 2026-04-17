@@ -32,7 +32,7 @@ const LABEL_CLS = 'text-[10px] uppercase tracking-[0.38em] text-reserve-cream/40
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 }
 
 const stagger = {
@@ -81,7 +81,7 @@ export default function ReservasPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           className="text-center max-w-md"
         >
           <div className="flex justify-center mb-8">

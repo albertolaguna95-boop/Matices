@@ -5,7 +5,7 @@ import { MapPin, Phone, Mail, Clock, Utensils } from 'lucide-react'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 }
 
 const stagger = {
@@ -118,7 +118,7 @@ export default function ContactoPage() {
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             className="flex flex-col gap-6"
           >
             <div className="w-full h-80 border border-reserve-outline overflow-hidden">

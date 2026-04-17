@@ -7,7 +7,7 @@ import { ArrowRight, ChevronDown } from 'lucide-react'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 36 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 }
 
 const stagger = {
@@ -46,7 +46,7 @@ function Hero() {
         <motion.span
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           className="block text-reserve-gold text-[10px] uppercase tracking-[0.55em] mb-10 font-medium"
         >
           Valdemoro, Madrid · Cocina Mediterránea
@@ -61,7 +61,7 @@ function Hero() {
                   key={i}
                   initial={{ y: '105%' }}
                   animate={{ y: '0%' }}
-                  transition={{ duration: 1.0, delay: 0.35 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{ duration: 1.0, delay: 0.35 + i * 0.07, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
                   className="font-serif text-[clamp(4.5rem,14vw,11rem)] leading-none tracking-[0.04em] gold-text-gradient inline-block select-none"
                 >
                   {letter}
@@ -76,7 +76,7 @@ function Hero() {
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
-            transition={{ duration: 0.9, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, delay: 1.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             style={{ originX: 0.5 }}
             className="h-px w-24 bg-reserve-gold/40"
           />
@@ -86,7 +86,7 @@ function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.25, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 1.25, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           className="text-reserve-cream/45 text-xs md:text-sm uppercase tracking-[0.35em] mb-5"
         >
           Una experiencia gastronómica
@@ -95,7 +95,7 @@ function Hero() {
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.45, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 1.45, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           className="text-reserve-cream/30 text-sm leading-relaxed mb-14 max-w-sm mx-auto"
         >
           Parrilla, cocina mediterránea y producto de temporada en el corazón de Valdemoro.
@@ -104,7 +104,7 @@ function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.8, delay: 1.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <Link
@@ -151,7 +151,7 @@ function Especialidades() {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             className="lg:col-span-5 relative"
           >
             <div className="aspect-[3/4] overflow-hidden">
@@ -283,7 +283,7 @@ function CartaDestacada() {
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.85, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.85, delay: i * 0.12, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
               className="group relative aspect-[3/4] overflow-hidden bg-white/5"
             >
               <img
@@ -363,7 +363,7 @@ function Galeria() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.7, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
               className="group relative aspect-square overflow-hidden bg-white/5"
             >
               <img

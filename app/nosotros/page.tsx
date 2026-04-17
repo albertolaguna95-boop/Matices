@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
-  show:   { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] } },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] } },
 }
 
 const stagger = {
@@ -107,7 +107,7 @@ export default function NosotrosPage() {
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             className="border-l-2 border-reserve-gold/25 pl-10"
           >
             <blockquote className="font-serif text-2xl md:text-[1.7rem] text-white leading-[1.4] mb-8 italic">
@@ -151,7 +151,7 @@ export default function NosotrosPage() {
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.8, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.8, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
                 className="flex gap-7"
               >
                 <span className="text-reserve-gold/20 font-serif text-4xl leading-none mt-1 select-none flex-shrink-0">

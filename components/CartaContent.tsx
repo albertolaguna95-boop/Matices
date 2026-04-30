@@ -163,7 +163,7 @@ export default function CartaContent({ platos }: { platos: Plato[] }) {
                     >
                       {/* Foto del plato */}
                       {item.imagen ? (
-                        <div className="flex-shrink-0 w-20 h-16 overflow-hidden border border-reserve-gold/20">
+                        <div className="flex-shrink-0 w-32 h-24 overflow-hidden border border-reserve-gold/20">
                           <img
                             src={item.imagen}
                             alt={item.nombre}
@@ -171,7 +171,7 @@ export default function CartaContent({ platos }: { platos: Plato[] }) {
                           />
                         </div>
                       ) : (
-                        <div className="flex-shrink-0 w-20 h-16 border border-dashed border-reserve-gold/30 bg-white/[0.03] flex flex-col items-center justify-center gap-1">
+                        <div className="flex-shrink-0 w-32 h-24 border border-dashed border-reserve-gold/30 bg-white/[0.03] flex flex-col items-center justify-center gap-1">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" className="text-reserve-gold/30">
                             <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
                           </svg>

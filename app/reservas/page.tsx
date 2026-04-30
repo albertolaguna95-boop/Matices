@@ -69,8 +69,16 @@ export default function ReservasPage() {
       mensaje:  form.mensaje,
     }])
 
+    if (err) { setEnviando(false); setError('Ha ocurrido un error. Por favor, inténtalo de nuevo.'); return }
+
+    // Enviar email de confirmación
+    await fetch('/api/reserva', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(form),
+    })
+
     setEnviando(false)
-    if (err) { setError('Ha ocurrido un error. Por favor, inténtalo de nuevo.'); return }
     setExito(true)
   }
 

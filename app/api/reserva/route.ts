@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
-const FROM    = process.env.RESEND_FROM    ?? 'Matices Restaurante <onboarding@resend.dev>'
-const MAIL_TO = process.env.RESTAURANTE_EMAIL ?? 'reservas@maticesrestaurante.es'
-
 export async function POST(req: NextRequest) {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    console.warn('RESEND_API_KEY no configurada — email omitido')
+    return NextResponse.json({ ok: true, warn: 'email_skipped' })
+  }
+
+  const resend  = new Resend(apiKey)
+  const FROM    = process.env.RESEND_FROM        ?? 'Matices Restaurante <onboarding@resend.dev>'
+  const MAIL_TO = process.env.RESTAURANTE_EMAIL  ?? 'reservas@maticesrestaurante.es'
+
   try {
     const { nombre, email, fecha, hora, personas, mensaje } = await req.json()
 

@@ -157,10 +157,26 @@ export default function CartaContent({ platos }: { platos: Plato[] }) {
                     <motion.div
                       key={item.id}
                       variants={fadeUp}
-                      className={`group flex items-start justify-between gap-8 py-5 ${
+                      className={`group flex items-center gap-5 py-5 ${
                         esBorde ? 'border-b border-reserve-gold/10' : ''
                       }`}
                     >
+                      {/* Foto del plato */}
+                      {item.imagen ? (
+                        <div className="flex-shrink-0 w-20 h-16 overflow-hidden border border-reserve-gold/15">
+                          <img
+                            src={item.imagen}
+                            alt={item.nombre}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex-shrink-0 w-20 h-16 border border-reserve-gold/8 bg-white/[0.02] flex items-center justify-center">
+                          <span className="text-reserve-gold/15 text-[9px] uppercase tracking-widest">foto</span>
+                        </div>
+                      )}
+
+                      {/* Nombre + descripción */}
                       <div className="flex-1 min-w-0">
                         <h3 className="text-white text-base tracking-wide mb-1 group-hover:text-reserve-cream transition-colors">
                           {item.nombre}
@@ -169,7 +185,9 @@ export default function CartaContent({ platos }: { platos: Plato[] }) {
                           <p className="text-reserve-cream/38 text-sm leading-relaxed">{item.descripcion}</p>
                         )}
                       </div>
-                      <div className="flex-shrink-0 text-right pt-0.5">
+
+                      {/* Precio */}
+                      <div className="flex-shrink-0 text-right">
                         <Precio plato={item} />
                       </div>
                     </motion.div>

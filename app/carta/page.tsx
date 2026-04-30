@@ -13,6 +13,7 @@ export type Plato = {
   disponible:   boolean
   orden:        number
   es_seccion:   boolean | null
+  imagen:       string | null
 }
 
 export default async function CartaPage() {
